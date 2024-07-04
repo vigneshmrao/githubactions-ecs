@@ -6,7 +6,6 @@ on:
       - "main"
 
 env:
-  AWS_REGION: ap-south-1
   ECR_REPOSITORY: demo-deploy
   ECS_SERVICE: demo-deploy
   ECS_CLUSTER: demo-deploy
@@ -29,7 +28,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -37,51 +36,29 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         run: |
-          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
       - name: Build, tag, and push Docker image to ECR
         id: build-image
         run: |
-          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          IMAGE_TAG=$(git rev-parse --short HEAD)
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${IMAGE_TAG} .
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${IMAGE_TAG}
+          echo "::set-output name=image_tag::${IMAGE_TAG}"
+        outputs:
+          image_tag: ${{ steps.build-image.outputs.image_tag }}
 
-      - name: Register the task definition in ECS
-        id: task-def
+      - name: Render Amazon ECS task definition
+        id: render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: |
-            {
-              "family": "hello-world-task",
-              "networkMode": "awsvpc",
-              "containerDefinitions": [
-                {
-                  "name": "${{ env.CONTAINER_NAME }}",
-                  "image": "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}",
-                  "essential": true,
-                  "memory": 256,
-                  "cpu": 256,
-                  "portMappings": [
-                    {
-                      "containerPort": 80,
-                      "hostPort": 80
-                    }
-                  ]
-                }
-              ],
-              "requiresCompatibilities": [
-                "FARGATE"
-              ],
-              "cpu": "256",
-              "memory": "512",
-              "executionRoleArn": "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ecsTaskExecutionRole"
-            }
+          task-definition: .github/workflows/task-definition.json
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ steps.build-image.outputs.image_tag }}
 
-      - name: Deploy to ECS service
+      - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           cluster: ${{ env.ECS_CLUSTER }}
           service: ${{ env.ECS_SERVICE }}
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
