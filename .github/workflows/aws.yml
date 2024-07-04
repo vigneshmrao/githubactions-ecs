@@ -6,11 +6,11 @@ on:
       - "main"
 
 env:
-  AWS_REGION: us-east-1
-  ECR_REPOSITORY: hello-world
-  ECS_SERVICE: hello-world-service
-  ECS_CLUSTER: hello-world-cluster
-  CONTAINER_NAME: hello-world-container
+  AWS_REGION: ap-south-1
+  ECR_REPOSITORY: demo-deploy
+  ECS_SERVICE: demo-deploy
+  ECS_CLUSTER: demo-deploy
+  CONTAINER_NAME: demo-deploy
   IMAGE_TAG: latest
 
 jobs:
