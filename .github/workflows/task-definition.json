@@ -1,25 +1,85 @@
 {
-  "family": "hello-world-task",
-  "networkMode": "awsvpc",
-  "containerDefinitions": [
-    {
-      "name": "demo-deploy",
-      "image": "${432606891118}.dkr.ecr.${ap-south-1}.amazonaws.com/${demo-deploy}:${latest}",
-      "essential": true,
-      "memory": 256,
-      "cpu": 256,
-      "portMappings": [
+    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:432606891118:task-definition/demo-deploy:1",
+    "containerDefinitions": [
         {
-          "containerPort": 80,
-          "hostPort": 80
+            "name": "demo-deploy",
+            "image": "432606891118.dkr.ecr.ap-south-1.amazonaws.com/demo-deploy",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "demo-deploy-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/demo-deploy",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "ap-south-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "systemControls": []
         }
-      ]
-    }
-  ],
-  "requiresCompatibilities": [
-    "FARGATE"
-  ],
-  "cpu": "256",
-  "memory": "512",
-  "executionRoleArn": "arn:aws:iam::${432606891118}:role/ecsTaskExecutionRole"
+    ],
+    "family": "demo-deploy",
+    "executionRoleArn": "arn:aws:iam::432606891118:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 1,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "3072",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2024-07-03T18:59:00.311Z",
+    "registeredBy": "arn:aws:iam::432606891118:user/devopsuser",
+    "tags": []
 }
