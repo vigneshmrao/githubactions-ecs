@@ -1,13 +1,13 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:432606891118:task-definition/ecs-task-demo-deploy:1",
+    "taskDefinitionArn": "arn:aws:ecs:eu-west-2:432606891118:task-definition/devops-taskdef-ecs:1",
     "containerDefinitions": [
         {
-            "name": "ecs-demo-deploy",
-            "image": "432606891118.dkr.ecr.us-east-1.amazonaws.com/ecr-demo-deploy",
+            "name": "devops-ecs-container",
+            "image": "432606891118.dkr.ecr.eu-west-2.amazonaws.com/devops-demo-ecs",
             "cpu": 0,
             "portMappings": [
                 {
-                    "name": "ecs-demo-deploy-80-tcp",
+                    "name": "devops-ecs-container-80-tcp",
                     "containerPort": 80,
                     "hostPort": 80,
                     "protocol": "tcp",
@@ -23,9 +23,9 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/ecs/ecs-task-demo-deploy",
+                    "awslogs-group": "/ecs/devops-taskdef-ecs",
                     "awslogs-create-group": "true",
-                    "awslogs-region": "us-east-1",
+                    "awslogs-region": "eu-west-2",
                     "awslogs-stream-prefix": "ecs"
                 },
                 "secretOptions": []
@@ -33,7 +33,7 @@
             "systemControls": []
         }
     ],
-    "family": "ecs-task-demo-deploy",
+    "family": "devops-taskdef-ecs",
     "executionRoleArn": "arn:aws:iam::432606891118:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "revision": 1,
@@ -79,7 +79,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-07-05T08:50:47.404Z",
-    "registeredBy": "arn:aws:iam::432606891118:user/devopsuser",
+    "registeredAt": "2024-07-10T11:16:11.364Z",
+    "registeredBy": "arn:aws:iam::432606891118:root",
     "tags": []
 }
