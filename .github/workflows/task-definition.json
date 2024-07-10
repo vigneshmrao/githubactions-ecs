@@ -1,9 +1,9 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:eu-west-2:432606891118:task-definition/devops-ecs-taskdefinition:1",
+    "taskDefinitionArn": "arn:aws:ecs:eu-west-2:432606891118:task-definition/devops-taskdef-ecs:11",
     "containerDefinitions": [
         {
             "name": "devops-ecs-container",
-            "image": "432606891118.dkr.ecr.eu-west-2.amazonaws.com/devops-demo-ecs",
+            "image": "432606891118.dkr.ecr.eu-west-2.amazonaws.com/:27a56878f8cae1edb09fd0f16ddb80abd78ad5cc",
             "cpu": 0,
             "portMappings": [
                 {
@@ -16,28 +16,24 @@
             ],
             "essential": true,
             "environment": [],
-            "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
-            "ulimits": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/ecs/devops-ecs-taskdefinition",
+                    "awslogs-group": "/ecs/devops-taskdef-ecs",
                     "awslogs-create-group": "true",
                     "awslogs-region": "eu-west-2",
                     "awslogs-stream-prefix": "ecs"
-                },
-                "secretOptions": []
+                }
             },
             "systemControls": []
         }
     ],
-    "family": "devops-ecs-taskdefinition",
-    "taskRoleArn": "arn:aws:iam::432606891118:role/ecsTaskExecutionRole",
-    "executionRoleArn": "arn:aws:iam::432606891118:role/ecsTaskExecutionRole",
+    "family": "devops-taskdef-ecs",
+    "executionRoleArn": "arn:aws:iam::432606891118:role/DevopsECSRole",
     "networkMode": "awsvpc",
-    "revision": 1,
+    "revision": 11,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -52,9 +48,6 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.task-iam-role"
         },
         {
             "name": "ecs.capability.execution-role-ecr-pull"
@@ -83,8 +76,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-07-10T14:18:25.873Z",
+    "registeredAt": "2024-07-10T15:18:12.965Z",
     "registeredBy": "arn:aws:iam::432606891118:user/devopsuser",
     "tags": []
 }
- 
