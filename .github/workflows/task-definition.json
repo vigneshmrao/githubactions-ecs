@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:eu-west-2:432606891118:task-definition/devops-taskdef-ecs:1",
+    "taskDefinitionArn": "arn:aws:ecs:eu-west-2:432606891118:task-definition/devops-ecs-taskdefinition:1",
     "containerDefinitions": [
         {
             "name": "devops-ecs-container",
@@ -23,7 +23,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/ecs/devops-taskdef-ecs",
+                    "awslogs-group": "/ecs/devops-ecs-taskdefinition",
                     "awslogs-create-group": "true",
                     "awslogs-region": "eu-west-2",
                     "awslogs-stream-prefix": "ecs"
@@ -33,7 +33,8 @@
             "systemControls": []
         }
     ],
-    "family": "devops-taskdef-ecs",
+    "family": "devops-ecs-taskdefinition",
+    "taskRoleArn": "arn:aws:iam::432606891118:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::432606891118:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "revision": 1,
@@ -51,6 +52,9 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
         },
         {
             "name": "ecs.capability.execution-role-ecr-pull"
@@ -79,7 +83,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-07-10T11:16:11.364Z",
-    "registeredBy": "arn:aws:iam::432606891118:root",
+    "registeredAt": "2024-07-10T14:18:25.873Z",
+    "registeredBy": "arn:aws:iam::432606891118:user/devopsuser",
     "tags": []
 }
